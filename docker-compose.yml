@@ -1,0 +1,26 @@
+version: "3"
+services:
+  db_final:
+    image: postgres:10
+    container_name: hqthinh_wnc_db_final
+    ports:
+      - 5436:5432
+    environment: 
+      POSTGRES_DB: hqt_webnc
+      POSTGRES_USER: webnangcao
+      POSTGRES_PASSWORD: abcdef1234
+  server_final:
+    depends_on: 
+      - db_final
+    image: hqthinh_wnc_server_final
+    container_name: hqthinh_wnc_server_final_1
+    build:
+      context: ./server
+    command: bash -c "yarn start"
+    ports:
+      - 5000:3000
+    env_file: server.env
+    volumes:
+      - ./server/node_modules:/usr/app/node_modules
+      - ./server:/usr/app
+
