@@ -18,9 +18,10 @@ services:
       context: ./server
     command: bash -c "yarn start"
     ports:
-      - 5000:3000
+      - 1000:3000
     env_file: server.env
     volumes:
-      - ./server/node_modules:/usr/app/node_modules
       - ./server:/usr/app
+      - ./server/node_modules:/usr/app/node_modules
+
 
