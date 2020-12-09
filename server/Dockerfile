@@ -4,4 +4,4 @@ COPY package.json yarn.lock ./
 RUN yarn install
 RUN ls ./node_modules
 
-RUN yarn global add knex nodemon mocha
+RUN yarn global add knex nodemon mocha pg knex-migrate
