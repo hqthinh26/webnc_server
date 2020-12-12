@@ -1,8 +1,8 @@
 const router = require('express').Router();
 const controllers = require('./account.controllers');
-
-router.post('/add', controllers.addNewAccount);
-
-router.get('/list', controllers.getList);
+/**
+ * Function: Tạo tài khoản người dùng.
+ */
+router.post('/create', controllers.create);
 
 module.exports = router;
