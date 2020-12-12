@@ -2,7 +2,7 @@ exports.up = async function (knex) {
   return await knex.raw(`
   CREATE TABLE account(
         id bigserial PRIMARY KEY,
-        username text UNIQUE NOT NULL,
+        account_name text UNIQUE NOT NULL,
         pw text NOT NULL,
         full_name text NOT NULL,
         email text,
