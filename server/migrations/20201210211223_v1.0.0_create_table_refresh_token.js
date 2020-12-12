@@ -1,7 +1,7 @@
 
 exports.up = async function(knex) {
   return await knex.raw(`
-    CREATE TABLE web_token(
+    CREATE TABLE refresh_token(
         id bigserial PRIMARY KEY,
         account_id int8 NOT NULL,
         token text NOT NULL,
