@@ -13,5 +13,6 @@ exports.createAccount = (body) => {
     "email",
     "age",
   ]);
+  newAccount.role_id = 1;
   return db("account").insert(newAccount).returning('id');
 };
