@@ -7,17 +7,19 @@ module.exports = {
       data: null,
     };
   },
-  error: (err) => {
+  error: (errMessage, code = 400) => {
     return {
       httpCode: 400,
+      code: code,
       error: true,
-      message: JSON.stringify(err),
+      message: JSON.stringify(errMessage),
       data: null,
     };
   },
   success: (data, message = "success") => {
     return {
       httpCode: 200,
+      code: 200,
       error: false,
       message,
       data: data,

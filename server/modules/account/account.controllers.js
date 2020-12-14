@@ -71,13 +71,13 @@ exports.login = async (req, res, next) => {
     );
 
     if (!isTaken)
-      return next(responseHandler.error(responseMessage.accountNameDoNotExist));
+      return next(responseHandler.error(responseMessage.accountNameDoNotExist, 201));
 
     console.log('this is account detail', isTaken);
     
     const isPwMatched = await bcrypt.compare(schema.value.pw, isTaken.pw);
 
-    if (!isPwMatched) return next(responseHandler.error(responseMessage.accountInvalid));
+    if (!isPwMatched) return next(responseHandler.error(responseMessage.accountInvalid, 202));
 
     next(responseHandler.success('Đăng nhập thành công'));
 
