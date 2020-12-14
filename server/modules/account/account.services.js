@@ -6,7 +6,6 @@ exports.isAccountNameTaken = (account_name, is_deleted = false) => {
   return db("account").where({ account_name, is_deleted }).first();
 };
 
-
 exports.createAccount = async (body) => {
   const newAccount = _.pick(body, [
     "account_name",

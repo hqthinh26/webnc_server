@@ -18,7 +18,7 @@ services:
       context: ./server
     command: bash -c "knex migrate:latest --knexfile knexfile.js && knex seed:run && yarn start"
     ports:
-      - 1000:3000
+      - 3002:3000
     env_file: server.env
     volumes:
       - ./server:/usr/app

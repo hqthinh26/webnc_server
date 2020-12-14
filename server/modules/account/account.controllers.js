@@ -1,8 +1,12 @@
 const Joi = require("joi");
 const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
+const { v4: uuidv4 } = require("uuid");
+const moment = require("moment");
 
 const responseHandler = require("../../response_handler");
 const services = require("./account.services");
+const refereshTokenServices = require("../refresh_token/referesh_token.services");
 
 const responseMessage = {
   accountNameTaken: "Người dùng đã tồn tại",
@@ -66,21 +70,54 @@ exports.login = async (req, res, next) => {
     if (schema.error)
       return next(responseHandler.validationError(schema.error));
 
+    //isTaken contains all the columns of the account
     const isTaken = await services.isAccountNameTaken(
       schema.value.account_name
     );
 
     if (!isTaken)
-      return next(responseHandler.error(responseMessage.accountNameDoNotExist, 201));
+      return next(
+        responseHandler.error(responseMessage.accountNameDoNotExist, 201)
+      );
 
-    console.log('this is account detail', isTaken);
-    
+    console.log("this is account detail", isTaken);
+
     const isPwMatched = await bcrypt.compare(schema.value.pw, isTaken.pw);
 
-    if (!isPwMatched) return next(responseHandler.error(responseMessage.accountInvalid, 202));
+    if (!isPwMatched)
+      return next(responseHandler.error(responseMessage.accountInvalid, 202));
 
-    next(responseHandler.success('Đăng nhập thành công'));
+    const { id, account_name, full_name } = isTaken;
 
+    const payload = {
+      id,
+      account_name,
+      full_name,
+    };
+
+    console.log("this is the secret", process.env.SUPER_SECRET_KEY);
+    console.log("this is the payload", payload);
+    const token = await jwt.sign(payload, process.env.SUPER_SECRET_KEY, { expiresIn: 60 });
+
+    const toClientRefreshToken = uuidv4();
+
+    //This is a new refresh_token row
+    const addToTokenTable = {
+      account_id: id,
+      token: toClientRefreshToken,
+      logout_at: null,
+      expired_at: moment().add(60,'s'),
+    };
+
+    const responseRF = await refereshTokenServices.create(addToTokenTable);
+
+    next(
+      responseHandler.success({
+        message: "Đăng nhập thành công",
+        token,
+        refresh_token: toClientRefreshToken,
+      })
+    );
   } catch (e) {
     next(e);
   }
