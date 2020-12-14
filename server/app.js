@@ -25,6 +25,7 @@ app.get("/", ( req, res ) => {
 app.use('/api/account', require("./modules/account/account.routes"));
 
 
+
 //Global Error Handler
 app.use((err, req, res, next) => {
   res.status( err.httpCode || 400 ).send({
