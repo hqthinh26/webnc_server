@@ -1,5 +1,9 @@
 const db = require('../../db');
 
-exports.create = (newRefreshToken) => {
-    return db("refresh_token").insert(newRefreshToken).returning('id');
+exports.create = (newAccessToken) => {
+    return db("token").insert(newAccessToken).returning('id');
+}
+
+exports.delete = (tokenString) => {
+    return db("token").where({token: tokenString}).del();
 }

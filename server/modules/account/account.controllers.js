@@ -65,8 +65,6 @@ exports.login = async (req, res, next) => {
       pw: Joi.string().required(),
     }).validate(req.query);
 
-    console.log("this is req.query", req.query);
-
     if (schema.error)
       return next(responseHandler.validationError(schema.error));
 
@@ -79,8 +77,6 @@ exports.login = async (req, res, next) => {
       return next(
         responseHandler.error(responseMessage.accountNameDoNotExist, 201)
       );
-
-    console.log("this is account detail", isTaken);
 
     const isPwMatched = await bcrypt.compare(schema.value.pw, isTaken.pw);
 
@@ -95,30 +91,54 @@ exports.login = async (req, res, next) => {
       full_name,
     };
 
-    console.log("this is the secret", process.env.SUPER_SECRET_KEY);
-    console.log("this is the payload", payload);
-    const token = await jwt.sign(payload, process.env.SUPER_SECRET_KEY, { expiresIn: 60 });
-
-    const toClientRefreshToken = uuidv4();
+    const token = await jwt.sign(payload, process.env.SUPER_SECRET_KEY, {expiresIn: '1d'});
 
     //This is a new refresh_token row
     const addToTokenTable = {
       account_id: id,
-      token: toClientRefreshToken,
-      logout_at: null,
-      expired_at: moment().add(60,'s'),
+      token: token,
+      //+1 day for expired time && 7h for local time
+      expired_at: moment().add(1,'d').add(7, 'h'),
     };
 
-    const responseRF = await refereshTokenServices.create(addToTokenTable);
+    await refereshTokenServices.create(addToTokenTable);
 
     next(
       responseHandler.success({
         message: "Đăng nhập thành công",
         token,
-        refresh_token: toClientRefreshToken,
       })
     );
   } catch (e) {
     next(e);
   }
 };
+
+const authMessages = {
+  tokenIsEmpty: "token is required",
+  tokenIsNotValid: "Token is not valid",
+  tokenIsNotInDB: "Không tồn tại token trong DB",
+};
+
+exports.logout = async (req, res, next) => {
+  try {
+    const authorization = req.headers['authorization'];
+    console.log('this is authozaad', authorization);
+
+    if (!authorization) return next(responseHandler.error(authMessages.tokenIsNotValid));
+
+    const accessToken = authorization.split(" ")[1];
+
+    if (!accessToken) return next(responseHandler.error(authMessages.tokenIsNotValid));
+
+
+    //staus returns the number of affected rows
+    const status = await refereshTokenServices.delete(accessToken);
+
+    if (status === 0) return next(responseHandler.error(authMessages.tokenIsNotInDB));
+
+    next(responseHandler.success([], 'Delete token successfully'));
+  } catch (e) {
+    next(e);
+  }
+}

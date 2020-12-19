@@ -1,4 +1,5 @@
 const router = require('express').Router();
+const auth = require('../../middleware/auth');
 const controllers = require('./account.controllers');
 /**
  * Function: Tạo tài khoản người dùng.
@@ -13,6 +14,9 @@ router.post('/create', controllers.create);
  * code: 202 - Sai tài khoản / mật khẩu
  */
 router.get('/login', controllers.login);
+
+
+router.delete('/logout', controllers.logout);
 
 
 module.exports = router;
