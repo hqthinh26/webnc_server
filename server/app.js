@@ -27,6 +27,7 @@ app.get("/", ( req, res ) => {
     res.status(200).send("This is server :)");
 })
 
+const data = 1;
 
 app.use('/api/account', require("./modules/account/account.routes"));
 
