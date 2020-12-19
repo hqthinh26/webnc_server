@@ -16,13 +16,13 @@ module.exports = {
       data: null,
     };
   },
-  success: (data, message = "success") => {
+  success: (data, message = "success", code = 200) => {
     return {
       httpCode: 200,
-      code: 200,
+      code,
       error: false,
       message,
-      data: data,
+      data,
     };
   },
 };
