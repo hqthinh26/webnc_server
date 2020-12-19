@@ -2,6 +2,11 @@ const express = require("express");
 const morgan = require("morgan");
 const bodyParser = require("body-parser");
 const cors = require("cors");
+const { required } = require("joi");
+
+const db = require('./db');
+
+const auth = require('./middleware/auth');
 
 const app = express();
 
@@ -22,9 +27,8 @@ app.get("/", ( req, res ) => {
     res.status(200).send("This is server :)");
 })
 
+
 app.use('/api/account', require("./modules/account/account.routes"));
-
-
 
 //Global Error Handler
 app.use((err, req, res, next) => {
