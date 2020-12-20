@@ -4,6 +4,7 @@ const controllers = require('./account.controllers');
 /**
  * Function: Tạo tài khoản người dùng.
  * code: 200 - Thành công
+ * code: 201 - Người dùng đã tồn tại
  */
 router.post('/create', controllers.create);
 

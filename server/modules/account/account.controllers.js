@@ -31,7 +31,7 @@ exports.create = async (req, res, next) => {
       repeat_pw: Joi.ref("pw"),
       full_name: Joi.string().required(),
       email: Joi.string(),
-      age: Joi.number(),
+      //age: Joi.number(), //omited
     }).validate(req.body);
 
     if (schema.error)
