@@ -30,6 +30,8 @@ app.get("/", ( req, res ) => {
 const data = 1;
 
 app.use('/api/account', require("./modules/account/account.routes"));
+app.use('/api/course_type', require("./modules/course_type/course_type.routes"));
+app.use('/api/course', require("./modules/course/course.routes"));
 
 //Global Error Handler
 app.use((err, req, res, next) => {
