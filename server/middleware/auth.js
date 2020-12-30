@@ -7,7 +7,6 @@ const authMessages = {
 };
 
 exports.isAuthenticate = async (req, res, next) => {
-  // must always be 2 token | access_token && refresh_token
   try {
     const authorization = req.headers["authorization"];
     if (!authorization) return next(responseHanlder.error(authMessages.tokenIsEmpty));
