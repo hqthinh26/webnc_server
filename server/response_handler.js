@@ -9,8 +9,8 @@ module.exports = {
   },
   error: (errMessage, code = 400) => {
     return {
-      httpCode: 400,
-      code: code,
+      httpCode: code,
+      code,
       error: true,
       message: JSON.stringify(errMessage),
       data: null,
