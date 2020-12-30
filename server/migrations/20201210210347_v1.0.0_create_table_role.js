@@ -9,6 +9,11 @@ exports.up = async function(knex) {
         created_at timestamp default now(),
         updated_at timestamp default now()
     );
+
+    INSERT INTO role(name) VALUES
+    ('Học Viên'),
+    ('Giảng Viên'),
+    ('Quản Trị Viên');
     `);
 };
 

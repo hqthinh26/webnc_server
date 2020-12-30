@@ -4,7 +4,7 @@ exports.up = async function(knex) {
     CREATE TABLE feedback(
         id bigserial PRIMARY KEY,
         comment text,
-        start int2 default 0,
+        voting_star int2 default 0,
         course_id int8,
         is_deleted boolean default false,
         created_at timestamp default now(),

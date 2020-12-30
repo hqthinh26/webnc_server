@@ -1,6 +1,5 @@
-
-exports.up = async function(knex) {
-    return await knex.raw(`
+exports.up = async function (knex) {
+  return await knex.raw(`
     CREATE TABLE account_course_watchlist(
         id bigserial PRIMARY KEY,
         account_id int8,
@@ -18,6 +17,4 @@ exports.up = async function(knex) {
     `);
 };
 
-exports.down = function(knex) {
-  
-};
+exports.down = function (knex) {};

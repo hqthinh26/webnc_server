@@ -1,7 +1,7 @@
 
 exports.up = async function(knex) {
   await knex.raw(`
-    CREATE TABLE lecturer_account(
+    CREATE TABLE lecturer_course(
         id bigserial PRIMARY KEY,
         lecturer_id int8,
         course_id int8,
