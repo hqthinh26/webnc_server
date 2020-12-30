@@ -24,13 +24,14 @@ const responseMessage = {
  * @param {age: integer}
  */
 exports.create = async (req, res, next) => {
+  console.log('this is body', req.body);
   try {
     const schema = Joi.object({
       account_name: Joi.string().required(),
       pw: Joi.string().required(),
       repeat_pw: Joi.ref("pw"),
       full_name: Joi.string().required(),
-      email: Joi.string(),
+      email: Joi.string().optional().allow(""),
       //age: Joi.number(), //omited
     }).validate(req.body);
 
@@ -42,7 +43,7 @@ exports.create = async (req, res, next) => {
       schema.value.account_name
     );
     if (isTaken)
-      return next(responseHandler.error(responseMessage.accountNameTaken));
+      return next(responseHandler.error(responseMessage.accountNameTaken, 201));
 
     const createAccount = await services.createAccount(schema.value);
     if (createAccount.length === 0)
@@ -69,6 +70,16 @@ exports.login = async (req, res, next) => {
       return next(responseHandler.validationError(schema.error));
 
     //isTaken contains all the columns of the account
+    /**
+     * @value {isTaken}
+     * @value {isTaken.id}
+     * @value {isTaken.account_name}
+     * @value {isTaken.pw}
+     * @value {isTaken.full_name}
+     * @value {isTaken.email}
+     * @value {isTaken.age}
+     * @value {isTaken.role_id}
+     */
     const isTaken = await services.isAccountNameTaken(
       schema.value.account_name
     );
