@@ -2,11 +2,10 @@ const Joi = require("joi");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const { v4: uuidv4 } = require("uuid");
-const moment = require("moment");
 
 const responseHandler = require("../../response_handler");
 const services = require("./account.services");
-const refereshTokenServices = require("../refresh_token/referesh_token.services");
+const tokenServices = require("../token/token.services");
 
 const responseMessage = {
   accountNameTaken: "Người dùng đã tồn tại",
@@ -24,7 +23,7 @@ const responseMessage = {
  * @param {age: integer}
  */
 exports.create = async (req, res, next) => {
-  console.log('this is body', req.body);
+  console.log("this is body", req.body);
   try {
     const schema = Joi.object({
       account_name: Joi.string().required(),
@@ -94,30 +93,27 @@ exports.login = async (req, res, next) => {
     if (!isPwMatched)
       return next(responseHandler.error(responseMessage.accountInvalid, 202));
 
-    const { id, account_name, full_name } = isTaken;
+    const { id, account_name, full_name, role_id } = isTaken;
 
     const payload = {
       id,
       account_name,
       full_name,
+      role_id,
     };
 
-    const token = await jwt.sign(payload, process.env.SUPER_SECRET_KEY, {expiresIn: '1d'});
+    const token = await jwt.sign(payload, process.env.SUPER_SECRET_KEY);
 
-    //This is a new refresh_token row
-    const addToTokenTable = {
+    await tokenServices.create({
       account_id: id,
-      token: token,
-      //+1 day for expired time && 7h for local time
-      expired_at: moment().add(1,'d').add(7, 'h'),
-    };
-
-    await refereshTokenServices.create(addToTokenTable);
+      token,
+    });
 
     next(
       responseHandler.success({
         message: "Đăng nhập thành công",
         token,
+        role_id,
       })
     );
   } catch (e) {
@@ -133,23 +129,24 @@ const authMessages = {
 
 exports.logout = async (req, res, next) => {
   try {
-    const authorization = req.headers['authorization'];
-    console.log('this is authozaad', authorization);
+    const authorization = req.headers["authorization"];
 
-    if (!authorization) return next(responseHandler.error(authMessages.tokenIsNotValid));
+    if (!authorization)
+      return next(responseHandler.error(authMessages.tokenIsNotValid));
 
     const accessToken = authorization.split(" ")[1];
 
-    if (!accessToken) return next(responseHandler.error(authMessages.tokenIsNotValid));
-
+    if (!accessToken)
+      return next(responseHandler.error(authMessages.tokenIsNotValid));
 
     //staus returns the number of affected rows
-    const status = await refereshTokenServices.delete(accessToken);
+    const status = await tokenServices.delete(accessToken);
 
-    if (status === 0) return next(responseHandler.error(authMessages.tokenIsNotInDB));
+    if (status === 0)
+      return next(responseHandler.error(authMessages.tokenIsNotInDB));
 
-    next(responseHandler.success([], 'Delete token successfully'));
+    next(responseHandler.success([], "Delete token successfully"));
   } catch (e) {
     next(e);
   }
-}
+};
