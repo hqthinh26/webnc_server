@@ -16,7 +16,7 @@ services:
     container_name: hqthinh_wnc_server_final_1
     build:
       context: ./server
-    command: bash -c "knex migrate:latest --knexfile knexfile.js && knex seed:run && yarn start"
+    command: bash -c "knex migrate:latest --knexfile knexfile.js && yarn start"
     ports:
       - 3002:3000
     env_file: server.env
@@ -24,5 +24,6 @@ services:
       - ./server:/usr/app
       - ./server/node_modules:/usr/app/node_modules
 
+# && knex seed:run
 # && knex seed:run
 
