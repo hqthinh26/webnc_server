@@ -5,7 +5,6 @@ exports.up = async function(knex) {
         id bigserial PRIMARY KEY,
         account_id int8 NOT NULL,
         token text NOT NULL,
-        expired_at timestamp NOT NULL,
         logout_at timestamp,
         created_at timestamp default now(),
         updated_at timestamp default now(),
