@@ -14,6 +14,50 @@ const responseMessage = {
   accountInvalid: "Sai tài khoản/mật khẩu",
 };
 
+// NOTE: decoded = {
+//   id,
+//   account_name,
+//   full_name,
+//   role_id,
+// };
+
+/**
+ *
+ * @param {*} req
+ * @param {*} res
+ * @param {*} next
+ */
+
+exports.detail = async (req, res, next) => {
+  try {
+    const { id } = req.decoded;
+    const detail = await services.accountDetail(id);
+    if (!detail) return next(responseHandler.error("Người dùng không tồn tại"));
+    return next(responseHandler.success(detail));
+  } catch (e) {
+    next(e);
+  }
+};
+
+exports.update = async (req, res, next) => {
+  try {
+    console.log('this is update body', req.body);
+    const schema = Joi.object({
+      full_name: Joi.string().required(),
+      email: Joi.string().required(),
+      age: Joi.number().optional().allow(null),
+    }).validate(req.body);
+
+    if (schema.error) return next(responseHandler.validationError(schema.error));
+
+    const result  = await services.updateAccount(req.decoded.id, schema.value);
+    console.log('this is update result', result);
+    next(responseHandler.success(result));
+  } catch (e) {
+    next(e);
+  }
+}
+
 /**
  * POST => use req.body
  * @param {username: text}
@@ -130,7 +174,7 @@ const authMessages = {
 exports.logout = async (req, res, next) => {
   try {
     const authorization = req.headers["authorization"];
-    console.log('this is token', authorization);
+    console.log("this is token", authorization);
 
     if (!authorization)
       return next(responseHandler.error(authMessages.tokenIsNotValid));
