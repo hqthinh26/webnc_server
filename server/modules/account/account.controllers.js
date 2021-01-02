@@ -130,6 +130,7 @@ const authMessages = {
 exports.logout = async (req, res, next) => {
   try {
     const authorization = req.headers["authorization"];
+    console.log('this is token', authorization);
 
     if (!authorization)
       return next(responseHandler.error(authMessages.tokenIsNotValid));

@@ -1,6 +1,12 @@
 const router = require('express').Router();
-const auth = require('../../middleware/auth');
+const auth = require('../../middleware/auth.controllers');
 const controllers = require('./account.controllers');
+
+/**
+ * API endpoint - /api/accounnt/...
+ */
+
+
 /**
  * Function: Tạo tài khoản người dùng.
  * code: 200 - Thành công

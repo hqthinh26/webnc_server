@@ -4,9 +4,9 @@ const bodyParser = require("body-parser");
 const cors = require("cors");
 const { required } = require("joi");
 
-const db = require('./db');
+const db = require("./db");
 
-const auth = require('./middleware/auth');
+const auth = require("./middleware/auth.controllers");
 
 const app = express();
 
@@ -15,34 +15,38 @@ app.use(express.json());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(
-    cors({
-      origin: "*",
-      methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
-      preflightContinue: false,
-      optionsSuccessStatus: 204,
-    })
-  );
+  cors({
+    origin: "*",
+    methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+    preflightContinue: false,
+    optionsSuccessStatus: 204,
+  })
+);
 
-app.get("/", ( req, res ) => {
-    res.status(200).send("This is server :)");
-})
+app.get("/", (req, res) => {
+  res.status(200).send("This is server :)");
+});
 
-const data = 1;
+app.get("/api/is_token_valid", auth.isTokenValid);
 
-app.use('/api/account', require("./modules/account/account.routes"));
-app.use('/api/course_type', require("./modules/course_type/course_type.routes"));
-app.use('/api/course', require("./modules/course/course.routes"));
+app.use("/api/account", require("./modules/account/account.routes"));
+app.use("/api/course_type", require("./modules/course_type/course_type.routes"));
+app.use("/api/course", require("./modules/course/course.routes"));
 
 //Global Error Handler
 app.use((err, req, res, next) => {
-  res.status( err.httpCode || 400 ).send({
+  res.status(err.httpCode || 400).send({
     code: err.code || 400,
     error: err.error === undefined ? true : err.error,
-    message: err.message || `Something broken !! Reported By Express Built-in Error Handler \n ${JSON.stringify(err)}`,
+    message:
+      err.message ||
+      `Something broken !! Reported By Express Built-in Error Handler \n ${JSON.stringify(
+        err
+      )}`,
     data: err.data || null,
   });
-})
+});
 
 app.listen(process.env.PORT || 3000, () => {
-    console.log(`server is running on port ${process.env.PORT}`)
+  console.log(`server is running on port ${process.env.PORT}`);
 });
