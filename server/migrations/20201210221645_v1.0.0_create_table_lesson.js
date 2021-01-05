@@ -4,6 +4,7 @@ exports.up = async function(knex) {
   CREATE TABLE lesson(
       id bigserial PRIMARY KEY,
       course_id int8,
+      lecturer_id int8,
       lession_chapter text,
       lession_name text,
       lession_content text,
@@ -13,8 +14,12 @@ exports.up = async function(knex) {
 
       CONSTRAINT fk_course_id
         FOREIGN KEY (course_id)
-            REFERENCES course(id)
-  );
+            REFERENCES course(id),
+
+      CONSTRAINT fk_lecturer_id
+        FOREIGN KEY (lecturer_id)
+          REFERENCES account(id)
+    );
   `)
 };
 
