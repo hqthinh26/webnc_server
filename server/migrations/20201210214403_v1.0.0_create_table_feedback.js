@@ -3,6 +3,7 @@ exports.up = async function(knex) {
   return await knex.raw(`
     CREATE TABLE feedback(
         id bigserial PRIMARY KEY,
+        account_id int8,
         comment text,
         voting_star int2 default 0,
         course_id int8,
@@ -12,7 +13,11 @@ exports.up = async function(knex) {
 
         CONSTRAINT fk_course_id
             FOREIGN KEY (course_id)
-                REFERENCES course(id)
+                REFERENCES course(id),
+
+        CONSTRAINT fk_account_id
+          FOREIGN KEY (account_id)
+            REFERENCES account(id)
     );
   `);
 };
