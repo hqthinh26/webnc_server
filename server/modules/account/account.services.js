@@ -9,7 +9,7 @@ exports.isAccountNameTaken = (account_name, is_deleted = false) => {
 
 exports.accountDetail = (account_id) => {
   return db("account as a")
-    .select("a.id", "a.account_name", "a.full_name", "a.email", "a.age", "a.role_id", "r.name as role_name")
+    .select("a.id", "a.account_name", "a.full_name", "a.email", "a.age", "a.role_id", "a.profile_image as profile_image","r.name as role_name")
     .innerJoin("role as r", "r.id", "a.role_id")
     .where({ "a.id": account_id })
     .first();
