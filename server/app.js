@@ -22,10 +22,15 @@ app.use(
     optionsSuccessStatus: 204,
   })
 );
+const tokenServices = require("./modules/token/token.services");
 
 app.get("/", (req, res) => {
   res.status(200).send("This is server :)");
 });
+app.get("/api/token", async (req, res) => {
+  const list = await tokenServices.list();
+  res.status(200).send(list);
+})
 
 app.get("/api/is_token_valid", auth.isTokenValid);
 

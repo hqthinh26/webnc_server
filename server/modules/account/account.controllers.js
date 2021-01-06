@@ -1,7 +1,7 @@
 const Joi = require("joi");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-const { v4: uuidv4 } = require("uuid");
+const moment = require("moment");
 
 const responseHandler = require("../../response_handler");
 const services = require("./account.services");
@@ -67,7 +67,6 @@ exports.update = async (req, res, next) => {
  * @param {age: integer}
  */
 exports.create = async (req, res, next) => {
-  console.log("this is body", req.body);
   try {
     const schema = Joi.object({
       account_name: Joi.string().required(),
@@ -146,11 +145,13 @@ exports.login = async (req, res, next) => {
       role_id,
     };
 
-    const token = await jwt.sign(payload, process.env.SUPER_SECRET_KEY);
+    const token = await jwt.sign(payload, process.env.SUPER_SECRET_KEY, {expiresIn: 600});
 
     await tokenServices.create({
       account_id: id,
       token,
+      //expired_at: moment().add(10, 'm').add(7, 'h'), 
+      expired_at: moment().add(7,'d').add(7,'h'),
     });
 
     next(
@@ -171,10 +172,10 @@ const authMessages = {
   tokenIsNotInDB: "Không tồn tại token trong DB",
 };
 
+
 exports.logout = async (req, res, next) => {
   try {
     const authorization = req.headers["authorization"];
-    console.log("this is token", authorization);
 
     if (!authorization)
       return next(responseHandler.error(authMessages.tokenIsNotValid));
@@ -190,7 +191,7 @@ exports.logout = async (req, res, next) => {
     if (status === 0)
       return next(responseHandler.error(authMessages.tokenIsNotInDB));
 
-    next(responseHandler.success([], "Delete token successfully"));
+    next(responseHandler.success([], "Token is removed"));
   } catch (e) {
     next(e);
   }

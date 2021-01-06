@@ -8,10 +8,9 @@ const controllers = require("./account.controllers");
 
 /**
  * @api Get Account Detail
+ * @apiVersion v1.0.0
  */
-router.get("/detail", 
-auth.isAuthenticate, 
-controllers.detail);
+router.get("/detail", auth.isAuthenticate, controllers.detail);
 
 /**
  * @api Update Account Info
