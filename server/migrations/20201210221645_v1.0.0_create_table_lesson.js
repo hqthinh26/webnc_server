@@ -9,8 +9,8 @@ exports.up = async function(knex) {
       lession_name text,
       lession_content text,
       is_deleted boolean default false,
-      created_at timestamp default now(),
-      updated_at timestamp default now(),
+      created_at timestamptz default now(),
+      updated_at timestamptz default now(),
 
       CONSTRAINT fk_course_id
         FOREIGN KEY (course_id)

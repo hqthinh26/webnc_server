@@ -5,8 +5,8 @@ exports.up = async function(knex) {
         id bigserial PRIMARY KEY,
         name text unique NOT NULL,
         is_deleted boolean default false,
-        created_at timestamp default now(),
-        updated_at  timestamp default now()
+        created_at timestamptz default now(),
+        updated_at  timestamptz default now()
     );
     
     INSERT INTO course_type(name) VALUES 

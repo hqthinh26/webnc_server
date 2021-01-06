@@ -8,8 +8,8 @@ exports.up = async function(knex) {
         to_date timestamp,
         discount_percent decimal(3,2),
         is_deleted boolean default false,
-        created_at timestamp default now(),
-        update_at timestamp default now()
+        created_at timestamptz default now(),
+        update_at timestamptz default now()
     );
     `);
 };

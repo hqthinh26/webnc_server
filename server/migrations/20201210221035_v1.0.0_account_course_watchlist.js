@@ -4,7 +4,8 @@ exports.up = async function (knex) {
         id bigserial PRIMARY KEY,
         account_id int8,
         course_id int8,
-        created_at timestamp default now(),
+        updated_at timestamptz default now(),
+        created_at timestamptz default now(),
 
         CONSTRAINT fk_account_id
             FOREIGN KEY (account_id)

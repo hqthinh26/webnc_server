@@ -10,8 +10,8 @@ exports.up = async function (knex) {
         role_id int8,
         profile_image text,
         is_deleted boolean default false,
-        created_at timestamp default now(),
-        updated_at timestamp default now(),
+        created_at timestamptz default now(),
+        updated_at timestamptz default now(),
         CONSTRAINT fk_role_id
             FOREIGN KEY (role_id)
                 REFERENCES role(id)

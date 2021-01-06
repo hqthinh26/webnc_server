@@ -12,8 +12,8 @@ exports.up = async function(knex) {
         rating_count int4,
         is_best_seller boolean default false,
         is_deleted boolean default false,
-        created_at timestamp default now(),
-        updated_at timestamp default now(),
+        created_at timestamptz default now(),
+        updated_at timestamptz default now(),
 
         CONSTRAINT fk_course_type_id
             FOREIGN KEY (course_type_id)
