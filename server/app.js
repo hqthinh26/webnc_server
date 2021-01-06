@@ -7,6 +7,7 @@ const { required } = require("joi");
 const db = require("./db");
 
 const auth = require("./middleware/auth.controllers");
+const populateResponse = require("./response_handler");
 
 const app = express();
 
@@ -27,13 +28,12 @@ const tokenServices = require("./modules/token/token.services");
 app.get("/", (req, res) => {
   res.status(200).send("This is server :)");
 });
-app.get("/api/token", async (req, res) => {
-  const list = await tokenServices.list();
-  res.status(200).send(list);
-})
 
 app.get("/api/is_token_valid", auth.isTokenValid);
 
+app.get("/api/auth", auth.isAuthenticate, (req, res, next) => {
+  next(populateResponse.success([], 'Token hợp lệ'));
+} )
 app.use("/api/account", require("./modules/account/account.routes"));
 app.use("/api/course_type", require("./modules/course_type/course_type.routes"));
 app.use("/api/course", require("./modules/course/course.routes"));
