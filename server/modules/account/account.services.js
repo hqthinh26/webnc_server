@@ -15,6 +15,10 @@ exports.accountDetail = (account_id) => {
     .first();
 };
 
+exports.updateImage = (account_id, image_link) => {
+  return db("account").update("profile_image", image_link).where("id", account_id);
+}
+
 exports.updateAccount = (id, body) => {
   const updatedInfo = _.pick(body, ["full_name", "email", "age"]);
   return db("account").update(updatedInfo).where("id", id);

@@ -6,6 +6,7 @@ const moment = require("moment");
 const responseHandler = require("../../response_handler");
 const services = require("./account.services");
 const tokenServices = require("../token/token.services");
+const { join } = require("../../db");
 
 const responseMessage = {
   accountNameTaken: "Người dùng đã tồn tại",
@@ -39,24 +40,45 @@ exports.detail = async (req, res, next) => {
   }
 };
 
+exports.updateImage = async (req, res, next) => {
+  try {
+    const schema = Joi.object({
+      image_link: Joi.string().required(),
+    }).validate(req.body);
+
+    if (schema.error)
+      return next(responseHandler.validationError(schema.error));
+
+    const account_id = req.decoded.id;
+
+    const response = await services.updateImage(account_id, schema.value.image_link);
+
+    next(responseHandler.success(response));
+    
+  } catch (e) {
+    next(e);
+  }
+};
+
 exports.update = async (req, res, next) => {
   try {
-    console.log('this is update body', req.body);
+    console.log("this is update body", req.body);
     const schema = Joi.object({
       full_name: Joi.string().required(),
       email: Joi.string().required(),
       age: Joi.number().optional().allow(null),
     }).validate(req.body);
 
-    if (schema.error) return next(responseHandler.validationError(schema.error));
+    if (schema.error)
+      return next(responseHandler.validationError(schema.error));
 
-    const result  = await services.updateAccount(req.decoded.id, schema.value);
-    console.log('this is update result', result);
+    const result = await services.updateAccount(req.decoded.id, schema.value);
+    console.log("this is update result", result);
     next(responseHandler.success(result));
   } catch (e) {
     next(e);
   }
-}
+};
 
 /**
  * POST => use req.body
@@ -145,13 +167,15 @@ exports.login = async (req, res, next) => {
       role_id,
     };
 
-    const token = await jwt.sign(payload, process.env.SUPER_SECRET_KEY, {expiresIn: 600});
+    const token = await jwt.sign(payload, process.env.SUPER_SECRET_KEY, {
+      expiresIn: "1d",
+    });
 
     await tokenServices.create({
       account_id: id,
       token,
-      //expired_at: moment().add(10, 'm').add(7, 'h'), 
-      expired_at: moment().add(7,'d').add(7,'h'),
+      //expired_at: moment().add(10, 'm').add(7, 'h'),
+      expired_at: moment().add(1, "d").add(7, "h"),
     });
 
     next(
@@ -171,7 +195,6 @@ const authMessages = {
   tokenIsNotValid: "Token is not valid",
   tokenIsNotInDB: "Không tồn tại token trong DB",
 };
-
 
 exports.logout = async (req, res, next) => {
   try {

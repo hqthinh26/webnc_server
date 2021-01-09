@@ -13,6 +13,13 @@ const controllers = require("./account.controllers");
 router.get("/detail", auth.isAuthenticate, controllers.detail);
 
 /**
+ * @api Update Account Image
+ * @apiVersion v1.0.0
+ */
+
+ router.put("/update_image", auth.isAuthenticate, controllers.updateImage);
+
+/**
  * @api Update Account Info
  */
 router.put("/update", auth.isAuthenticate, controllers.update);
