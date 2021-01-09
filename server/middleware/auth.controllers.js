@@ -40,6 +40,13 @@ exports.isAuthenticate = async (req, res, next) => {
     
     if (isExpired) return next(responseHanlder.error("Token đã hết hạn"));
 
+    /**
+     * @param {decoded}
+     * @param {decoded.id}
+     * @param {decoded.account_name}
+     * @param {decoded.full_name}
+     * @param {decoded.role_id}
+     */
     const decoded = await jwt.verify(
       access_token,
       process.env.SUPER_SECRET_KEY

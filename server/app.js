@@ -29,7 +29,8 @@ app.get("/", (req, res) => {
   res.status(200).send("This is server :)");
 });
 
-app.get("/api/is_token_valid", auth.isTokenValid);
+//app.get("/api/is_token_valid", auth.isTokenValid);
+app.use("/api/search", require('./utils/search/search.routes'));
 
 app.get("/api/auth", auth.isAuthenticate, (req, res, next) => {
   next(populateResponse.success([], 'Token hợp lệ'));
