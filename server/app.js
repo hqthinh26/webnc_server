@@ -30,16 +30,23 @@ app.get("/", (req, res) => {
 });
 
 //app.get("/api/is_token_valid", auth.isTokenValid);
-app.use("/api/search", require('./utils/search/search.routes'));
+app.use("/api/search", require("./utils/search/search.routes"));
 
 app.get("/api/auth", auth.isAuthenticate, (req, res, next) => {
-  next(populateResponse.success([], 'Token hợp lệ'));
-} )
+  next(populateResponse.success([], "Token hợp lệ"));
+});
+
 app.use("/api/account", require("./modules/account/account.routes"));
-app.use("/api/course_type", require("./modules/course_type/course_type.routes"));
+app.use(
+  "/api/course_type",
+  require("./modules/course_type/course_type.routes")
+);
 app.use("/api/course", require("./modules/course/course.routes"));
-app.use("/api/course_detail", require("./modules/course_detail/course_detail.routes"));
-app.use("/api/feedback", require('./modules/feedback/feedback.routes'));
+app.use(
+  "/api/course_detail",
+  require("./modules/course_detail/course_detail.routes")
+);
+app.use("/api/feedback", require("./modules/feedback/feedback.routes"));
 
 //Global Error Handler
 app.use((err, req, res, next) => {

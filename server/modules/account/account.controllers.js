@@ -6,6 +6,7 @@ const moment = require("moment");
 const responseHandler = require("../../response_handler");
 const services = require("./account.services");
 const tokenServices = require("../token/token.services");
+const permissionServices = require("../permission/permisison.services");
 const { join } = require("../../db");
 
 const responseMessage = {
@@ -167,6 +168,8 @@ exports.login = async (req, res, next) => {
       role_id,
     };
 
+    console.log('this is account id', id);
+
     const token = await jwt.sign(payload, process.env.SUPER_SECRET_KEY, {
       expiresIn: "1d",
     });
@@ -178,10 +181,14 @@ exports.login = async (req, res, next) => {
       expired_at: moment().add(1, "d").add(7, "h"),
     });
 
+    const permissions = await permissionServices.getAccountPermissions(id);
+
+    console.log('this is permission', permissions);
     next(
       responseHandler.success({
         message: "Đăng nhập thành công",
         token,
+        permissions,
         role_id,
       })
     );

@@ -18,11 +18,11 @@ exports.up = async function (knex) {
   );
 
   INSERT INTO account(account_name, pw, full_name, email, age, role_id, profile_image) VALUES
-  ('thinhhq', 'admin1', 'Huỳnh Quốc Thịnh', 'quocthinh.huynh26@gmail.com', 22, 3, 'https://www.pngkit.com/png/full/133-1337492_google-employee-amanda-avatar.png'),
+  ('thinhhq', '$2a$10$cBYdHOHnUhEGF.qs/2/t3ukYMR2tqPcSqgzRbpSEUFD0rGhR7kpuK', 'Huỳnh Quốc Thịnh - admin', 'quocthinh.huynh26@gmail.com', 22, 3, 'https://www.pngkit.com/png/full/133-1337492_google-employee-amanda-avatar.png'),
   ('themd', 'admin2', 'Đỗ Minh Thế', 'Dominhthe110@gmail.com', 23, 3, 'https://cdn3.vectorstock.com/i/1000x1000/30/97/flat-business-man-user-profile-avatar-icon-vector-4333097.jpg'),
   ('Jose Portilla', 'sample', 'Jose Portilla', 'Jose Portilla@gmail.com', 20, 2, 'https://cdn2.vectorstock.com/i/1000x1000/41/11/flat-business-woman-user-profile-avatar-icon-vector-4334111.jpg'),
-  ('Kirill Eremenko, Hadelin de Pnateves', 'sample', 'Kirill Eremenko@gmail.com', '', 20, 2, 'https://4.bp.blogspot.com/-txKoWDBmvzY/XHAcBmIiZxI/AAAAAAAAC5o/wOkD9xoHn28Dl0EEslKhuI-OzP8_xvTUwCLcBGAs/s1600/2.jpg');
-  
+  ('Kirill Eremenko, Hadelin de Pnateves', 'sample', 'Kirill Eremenko@gmail.com', '', 20, 2, 'https://4.bp.blogspot.com/-txKoWDBmvzY/XHAcBmIiZxI/AAAAAAAAC5o/wOkD9xoHn28Dl0EEslKhuI-OzP8_xvTUwCLcBGAs/s1600/2.jpg'),
+  ('quocthinh', '$2a$10$cBYdHOHnUhEGF.qs/2/t3ukYMR2tqPcSqgzRbpSEUFD0rGhR7kpuK', 'Quốc thịnh - student', 'student@gmail.com', 24, 1, '');
   `);
 };
 
