@@ -52,6 +52,7 @@ exports.isAuthenticate = async (req, res, next) => {
       process.env.SUPER_SECRET_KEY
     );
 
+    console.log('successful');
     req.decoded = decoded;
     next();
   } catch (e) {

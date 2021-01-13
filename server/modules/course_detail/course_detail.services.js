@@ -18,3 +18,7 @@ exports.getDetailByCourseID = (query) => {
       "course_detail.is_deleted": false,
     });
 };
+
+exports.create = (courseDetail) => {
+  return db("course_detail").insert(courseDetail).returning("id");
+}

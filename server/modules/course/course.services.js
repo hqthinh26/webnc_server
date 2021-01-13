@@ -15,3 +15,7 @@ exports.getList = (query = {}) => {
         }
     });
 }
+
+exports.create = (course) => {
+    return db("course").insert(course).returning("id");
+}
