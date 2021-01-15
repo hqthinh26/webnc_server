@@ -11,8 +11,8 @@ exports.getDetailByCourseID = (query) => {
       "course.rating_count as course_rating_count",
       "course.is_best_seller as course_is_best_seller",
     )
-    .innerJoin("account", "account.id", "course_detail.lecturer_id")
     .innerJoin("course", "course.id", "course_detail.course_id")
+    .innerJoin("account", "course.lecturer_id", "account.id")
     .where({
       "course_detail.course_id": query.course_id,
       "course_detail.is_deleted": false,
